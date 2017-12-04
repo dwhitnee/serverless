@@ -1,0 +1,32 @@
+# configuration for uploading code to the AWS cloud
+# https://serverless.com/framework/docs/
+
+# The `service` block is the name of the service, as in
+# https://1zqvyi3gfk.execute-api.us-east-1.amazonaws.com/dev/late-bus
+service: late-bus
+
+
+# Where the service will be deployed
+provider:
+  name: aws
+  runtime: nodejs6.10
+
+# What code to deploy
+functions:
+
+  helloWorld:
+    handler: handler.helloWorld
+    # The `events` block defines how to trigger the handler.helloWorld code
+    events:
+      - http:
+          path: hello-world
+          method: get
+          cors: true
+
+  busRoutes:
+    handler: handler.busRoutes
+    events:
+      - http:
+          path: bus-routes
+          method: get
+          cors: true
