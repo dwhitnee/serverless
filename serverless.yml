@@ -1,6 +1,12 @@
 # configuration for uploading code to the AWS cloud
 # https://serverless.com/framework/docs/
 
+# edit ~/.aws/credentials with [serverless-admin] keys
+#    export AWS_PROFILE="serverless-admin"
+#    export AWS_REGION=us-west-2
+#    serverless deploy    # --aws-profile serverless-admin
+
+
 # The `service` block is the name of the service, as in
 # https://1zqvyi3gfk.execute-api.us-east-1.amazonaws.com/dev/late-bus
 service: late-bus
@@ -29,4 +35,12 @@ functions:
       - http:
           path: bus-routes
           method: get
+          cors: true
+
+  busEvent:
+    handler: handler.busEvent
+    events:
+      - http:
+          path: event
+          method: get   # should be a POST
           cors: true

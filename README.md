@@ -1,6 +1,7 @@
 "server" functions to upload to the cloud to run in AWS Lambda
-========
+====
 
+Requires local AWS credentials for [serverless-admin] in ~/.aws/credentials
 <code>
 
     # Install serverless globally
@@ -13,6 +14,7 @@
     serverless create --template hello-world
 
     # Deploy to AWS
+    # edit ~/.aws/credentials with [serverless-admin] keys
     export AWS_PROFILE="serverless-admin"
     export AWS_REGION=us-west-2
     serverless deploy    # --aws-profile serverless-admin

@@ -1,13 +1,29 @@
 'use strict';
 
+// HTTP response for successful call
 let successResponse = {
+  body: "RESPONSE GOES HERE",
+
   statusCode: 200,
   headers: {
     'Access-Control-Allow-Origin': '*' // Required for CORS support to work
-  },
-
-  body: "RESPONSE GOES HERE"
+  }
 };
+
+// HTTP response for bad call
+// 400 = we got bad data from user
+// 404 = page not found
+// 500 = server error
+let errorResponse = "doh!";
+/*{
+  statusCode: 400,
+  message: "There was an error in the request",
+
+  headers: {
+    'Access-Control-Allow-Origin': '*' // Required for CORS support to work
+  }
+};
+ */
 
 module.exports = {
   //----------------------------------------
@@ -30,6 +46,7 @@ module.exports = {
   busRoutes: function( event, context, callback ) {
 
     const response = successResponse;
+
     response.body = JSON.stringify({
       busRoutes: [1004, 1005, 1006],
       bus: {
@@ -48,6 +65,35 @@ module.exports = {
     });
 
     callback( null, response );
+  },
+
+  //----------------------------------------
+  // Something happened, store it. Read input from event.queryStringParameters
+  //----------------------------------------
+  busEvent: function( event, context, callback ) {
+
+    let response = successResponse;
+    let query = event.queryStringParameters;
+    let errors = null;
+
+    if (!query) {
+      errors = errorResponse;
+
+    } else {
+      let timeStamp = event.requestContext.requestTimeEpoch;
+      let timeString = event.requestContext.requestTime;
+
+      // FIXME: store this in DB
+      response.body = JSON.stringify({
+        bus: query.bus,
+        event: query.event,
+        time: timeStamp,
+        debug: event
+      });
+
+    }
+
+    callback( errors, response );
   }
 
 };
