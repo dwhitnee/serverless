@@ -14,16 +14,16 @@ let successResponse = {
 // 400 = we got bad data from user
 // 404 = page not found
 // 500 = server error
-let errorResponse = "doh!";
-/*{
+let errorResponse = {
   statusCode: 400,
-  message: "There was an error in the request",
+  error: { messageString: "huh?" },
+  messageString: "Doh! There was an error in the request",
 
   headers: {
     'Access-Control-Allow-Origin': '*' // Required for CORS support to work
   }
 };
- */
+
 
 module.exports = {
   //----------------------------------------
@@ -31,7 +31,7 @@ module.exports = {
   //----------------------------------------
   helloWorld:  function( event, context, callback ) {
 
-    const response = successResponse;
+    let response = successResponse;
     response.body = JSON.stringify({
       message: 'Go Serverless v1.0! Your function executed successfully!',
       debug: event
@@ -45,7 +45,7 @@ module.exports = {
   //----------------------------------------
   busRoutes: function( event, context, callback ) {
 
-    const response = successResponse;
+    let response = successResponse;
 
     response.body = JSON.stringify({
       busRoutes: [1004, 1005, 1006],
@@ -75,19 +75,22 @@ module.exports = {
     let response = successResponse;
     let query = event.queryStringParameters;
     let errors = null;
+    let now = new Date();
 
     if (!query) {
-      errors = errorResponse;
+      response = errorResponse;
+      // errors = "No query parameters specified";
 
     } else {
       let timeStamp = event.requestContext.requestTimeEpoch;
       let timeString = event.requestContext.requestTime;
-
+	
       // FIXME: store this in DB
       response.body = JSON.stringify({
         bus: query.bus,
         event: query.event,
         time: timeStamp,
+	timeISO: now.toISOString(),
         debug: event
       });
 
