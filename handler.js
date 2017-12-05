@@ -82,13 +82,9 @@ module.exports = {
       
     let response = successResponse;
     let query = event.queryStringParameters;
-    let errors = null;
     let now = new Date();
 
     if (!query) {
-      response = errorResponse;
-      // errors = "No query parameters specified";
-      
       callback( errorResponse );
 
     } else {
@@ -98,9 +94,9 @@ module.exports = {
         
       response.body = JSON.stringify({
         bus: query.bus,
-        event: query.event,
         time: timeStamp,
         timeISO: now.toISOString(),
+	message = "update successful",
         debug: event
       });
         
@@ -111,13 +107,13 @@ module.exports = {
         TableName : 'Widgets',
         Item: {
           HashKey: 'id',
-          id: query.bus |0, 
-	  time: Date.now(),
-          color: "blue",
-          comment: "I like unicorns"
+          id: parseInt( query.bus ), 
+	  time: Date.now()
         }
       };
       
+      Object.assign( dbParams.Item, query );
+
       let AWS = require('aws-sdk');
       let dynamoDB = new AWS.DynamoDB.DocumentClient();
       
