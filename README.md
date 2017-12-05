@@ -26,3 +26,7 @@ Requires local AWS credentials for [serverless-admin] in ~/.aws/credentials
     serverless invoke local -f helloWorld
 
 </code>
+
+In order to use DynamoDB you must allow DynamoDB access to dev and prod AWS Roles: https://console.aws.amazon.com/iam/home?#/roles
+* late-bus-dev-us-west-2-lambdaRole
+* late-bus-prod-us-west-2-lambdaRole
