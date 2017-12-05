@@ -1,3 +1,7 @@
+//----------------------------------------
+//  Functions to be uploaded to the "cloud' (AWS Lambda and API Gateway)
+//----------------------------------------
+
 'use strict';
 
 // HTTP response for successful call
@@ -6,7 +10,8 @@ let successResponse = {
 
   statusCode: 200,
   headers: {
-    'Access-Control-Allow-Origin': '*' // Required for CORS support to work
+    // Allow any web page to call us (CORS support)
+    'Access-Control-Allow-Origin': '*'
   }
 };
 
@@ -15,26 +20,29 @@ let successResponse = {
 // 404 = page not found
 // 500 = server error
 let errorResponse = {
-  statusCode: 400,
   error: { messageString: "huh?" },
   messageString: "Doh! There was an error in the request",
-
-  headers: {
-    'Access-Control-Allow-Origin': '*' // Required for CORS support to work
-  }
 };
 
+
+//----------------------------------------
+// server functions go here
+//----------------------------------------
 
 module.exports = {
   //----------------------------------------
   // example
+  // @param event -    info about the call (URL params, caller, etc)
+  // @param context -  info about AWS (generally uninteresting)
+  // @param callback - function to invoke when we are done
   //----------------------------------------
   helloWorld:  function( event, context, callback ) {
 
     let response = successResponse;
     response.body = JSON.stringify({
-      message: 'Go Serverless v1.0! Your function executed successfully!',
-      debug: event
+      message: 'Hello World! Your function executed successfully!',
+      event: event,
+      context: context
     });
 
     callback( null, response );
@@ -71,7 +79,7 @@ module.exports = {
   // Something happened, store it. Read input from event.queryStringParameters
   //----------------------------------------
   busEvent: function( event, context, callback ) {
-
+      
     let response = successResponse;
     let query = event.queryStringParameters;
     let errors = null;
@@ -80,23 +88,49 @@ module.exports = {
     if (!query) {
       response = errorResponse;
       // errors = "No query parameters specified";
+      
+      callback( errorResponse );
 
     } else {
+
       let timeStamp = event.requestContext.requestTimeEpoch;
       let timeString = event.requestContext.requestTime;
-	
-      // FIXME: store this in DB
+        
       response.body = JSON.stringify({
         bus: query.bus,
         event: query.event,
         time: timeStamp,
-	timeISO: now.toISOString(),
+        timeISO: now.toISOString(),
         debug: event
       });
-
+        
+      //----------------------------------------
+      // save data to DB
+      //----------------------------------------
+      let dbParams = {
+        TableName : 'Widgets',
+        Item: {
+          HashKey: 'id',
+          id: query.bus |0, 
+	  time: Date.now(),
+          color: "blue",
+          comment: "I like unicorns"
+        }
+      };
+      
+      let AWS = require('aws-sdk');
+      let dynamoDB = new AWS.DynamoDB.DocumentClient();
+      
+      dynamoDB.put( dbParams, function(err, data) {
+        if (err) {
+          console.log(err);
+          callback( err );      
+        } else {
+          callback( null, response );   
+        }
+      });
     }
-
-    callback( errors, response );
+      
   }
 
 };
