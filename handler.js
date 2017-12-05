@@ -96,7 +96,7 @@ module.exports = {
         bus: query.bus,
         time: timeStamp,
         timeISO: now.toISOString(),
-	message = "update successful",
+	message: "update successful",
         debug: event
       });
         
@@ -106,7 +106,7 @@ module.exports = {
       let dbParams = {
         TableName : 'Widgets',
         Item: {
-          HashKey: 'id',
+          //HashKey: 'id',
           id: parseInt( query.bus ), 
 	  time: Date.now()
         }
