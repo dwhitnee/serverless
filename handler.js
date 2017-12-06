@@ -79,7 +79,7 @@ module.exports = {
   // Something happened, store it. Read input from event.queryStringParameters
   //----------------------------------------
   busEvent: function( event, context, callback ) {
-      
+
     let response = successResponse;
     let query = event.queryStringParameters;
     let now = new Date();
@@ -91,15 +91,15 @@ module.exports = {
 
       let timeStamp = event.requestContext.requestTimeEpoch;
       let timeString = event.requestContext.requestTime;
-        
+
       response.body = JSON.stringify({
         bus: query.bus,
         time: timeStamp,
         timeISO: now.toISOString(),
-	message: "update successful",
+        message: "update successful",
         debug: event
       });
-        
+
       //----------------------------------------
       // save data to DB
       //----------------------------------------
@@ -107,26 +107,26 @@ module.exports = {
         TableName : 'Widgets',
         Item: {
           //HashKey: 'id',
-          id: parseInt( query.bus ), 
-	  time: Date.now()
+          id: parseInt( query.bus ),
+          time: now.toDateString()
         }
       };
-      
+
       Object.assign( dbParams.Item, query );
 
       let AWS = require('aws-sdk');
       let dynamoDB = new AWS.DynamoDB.DocumentClient();
-      
+
       dynamoDB.put( dbParams, function(err, data) {
         if (err) {
           console.log(err);
-          callback( err );      
+          callback( err );
         } else {
-          callback( null, response );   
+          callback( null, response );
         }
       });
     }
-      
+
   }
 
 };

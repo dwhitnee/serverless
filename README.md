@@ -20,13 +20,18 @@ Requires local AWS credentials for [serverless-admin] in ~/.aws/credentials
     serverless deploy    # --aws-profile serverless-admin
 
     # Function deployed! Trigger with live url
-    http://xyz.amazonaws.com/hello-world
+    http://xxxx.amazonaws.com/hello-world
 
     # run functions locally
     serverless invoke local -f helloWorld
+
+    # Tail the serer logs
+    serverless logs -f helloWorld -t
 
 </code>
 
 In order to use DynamoDB you must allow DynamoDB access to dev and prod AWS Roles: https://console.aws.amazon.com/iam/home?#/roles
 * late-bus-dev-us-west-2-lambdaRole
 * late-bus-prod-us-west-2-lambdaRole
+
+Or put that in serverless.yml

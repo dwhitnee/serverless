@@ -40,7 +40,7 @@ module.exports = {
           stops: [6,7,8,9]
         },
         1006: {
-          stops: ["x", "y", "z"]
+          stops: ["x", "y", "z", "w"]
         }
       },
 
