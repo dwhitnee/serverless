@@ -1,5 +1,5 @@
 //----------------------------------------
-//  Functions to be uploaded to the "cloud' (AWS Lambda and API Gateway)
+//  Functions to be uploaded to the "cloud" (AWS Lambda and API Gateway)
 //----------------------------------------
 
 'use strict';

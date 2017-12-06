@@ -1,13 +1,13 @@
 #----------------------------------------
 # configuration for uploading code to the AWS cloud
 # https://serverless.com/framework/docs/
-
-# edit ~/.aws/credentials with [serverless-admin] keys
+#----------------------------------------
+#
+# edit ~/.aws/credentials with [serverless-admin] private keys
 #    export AWS_PROFILE="serverless-admin"
 #    export AWS_REGION=us-west-2
 #    serverless deploy    # --aws-profile serverless-admin
-
-
+#
 # The `service` block is the name of the service, as in
 # https://1zqvyi3gfk.execute-api.us-east-1.amazonaws.com/dev/late-bus
 #----------------------------------------
@@ -21,9 +21,19 @@ provider:
 
 #----------------------------------------
 # What code to deploy
-# The `events` block defines how to trigger the handler code
+# The 'events' block defines how to trigger the handler code
+# 'handler' refers to <file name>.<function name>
 #----------------------------------------
 functions:
+
+  bussy:
+    handler: lateBus.helloBus
+    events:
+      - http:
+          path: bussy-mcbus
+          method: get
+          cors: true
+
 
   helloWorld:
     handler: handler.helloWorld
