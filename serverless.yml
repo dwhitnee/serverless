@@ -17,6 +17,7 @@ service: late-bus
 # Where the service will be deployed and what it can access
 provider:
   name: aws
+  region: us-west-2
   runtime: nodejs6.10
   iamRoleStatements:
     - Effect: "Allow"
