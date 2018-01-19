@@ -27,6 +27,19 @@ provider:
         "arn:aws:dynamodb:us-west-2:*:table/Bus*"
       ]
 
+#----------------------------------------------------------------------
+# see db/serverless.yml to create the DB table. This will create the table:
+#  cd db; serverless deploy
+#
+# if we put this config here, then every deploy fails with "BusEvents already exists"
+#resources:
+#  Resources:
+#    BusEventsTable:
+#      Type: AWS::DynamoDB::Table
+#   ...
+#----------------------------------------------------------------------
+
+
 #----------------------------------------
 # What code to deploy
 # The 'events' block defines how to trigger the handler code
@@ -65,11 +78,3 @@ functions:
           path: event
           cors: true
           method: post
-
-
-# see db/serverless.yml to create the DB table
-# if we put this config here, then every deploy fails with "BusEvents already exists"
-#resources:
-#  Resources:
-#    BusEventsTable:
-#      Type: AWS::DynamoDB::Table
