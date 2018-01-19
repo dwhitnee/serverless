@@ -24,7 +24,6 @@ provider:
       Action:
         - dynamodb:*
       Resource: [
-        "arn:aws:dynamodb:us-east-1:*:table/Widg*",
         "arn:aws:dynamodb:us-west-2:*:table/Bus*"
       ]
 
@@ -35,15 +34,6 @@ provider:
 #----------------------------------------
 functions:
 
-  bussy:
-    handler: lateBus.helloBus
-    events:
-      - http:
-          path: bussy-mcbus
-          method: get
-          cors: true
-
-
   helloWorld:
     handler: handler.helloWorld
     events:
@@ -53,17 +43,25 @@ functions:
           cors: true
 
   busRoutes:
-    handler: handler.busRoutes
+    handler: lateBus.busRoutes
     events:
       - http:
           path: bus-routes
           method: get
           cors: true
 
-  busEvent:
-    handler: handler.busEvent
+  getBusEvents:
+    handler: lateBus.getBusEvents
+    events:
+      - http:
+          path: events
+          method: get
+          cors: true
+
+  storeBusEvent:
+    handler: lateBus.storeBusEvent
     events:
       - http:
           path: event
-          method: get   # should be a POST
           cors: true
+          method: post
