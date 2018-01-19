@@ -1,0 +1,62 @@
+#----------------------------------------
+# configuration for creating DynamoDB table in the AWS cloud
+# https://serverless.com/framework/docs/
+#----------------------------------------
+#
+# edit ~/.aws/credentials with [serverless-admin] private keys
+#    export AWS_PROFILE="serverless-admin"
+#    export AWS_REGION=us-west-2
+#    serverless deploy    # --aws-profile serverless-admin --region us-west-2
+#
+# The `service` block is the name of the service, as in
+# https://1zqvyi3gfk.execute-api.us-east-1.amazonaws.com/dev/late-bus
+#----------------------------------------
+
+service: late-bus-resources
+
+# Where the service will be deployed and what it can access
+provider:
+  name: aws
+  region: us-west-2
+  runtime: nodejs6.10
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - dynamodb:*
+      Resource: [
+        "arn:aws:dynamodb:us-west-2:*:table/Bus*"
+      ]
+
+resources:
+  Resources:
+    BusEventsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: BusEvents
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+          - AttributeName: bus
+            AttributeType: N
+          - AttributeName: day
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+          - AttributeName: day
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        GlobalSecondaryIndexes:
+          - IndexName: day-bus-index
+            KeySchema:
+              - AttributeName: day
+                KeyType: HASH
+              - AttributeName: bus
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
