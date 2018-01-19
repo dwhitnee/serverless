@@ -79,6 +79,14 @@ module.exports = {
 
       let day = query.day || now.toDateString();   // "Thu Jan 18 2018"
 
+      // SQL equivalent: "SELECT * from BusEvents WHERE bus=1006 AND day="Thu Jan 18 2018"
+
+      // The Index allows us to do this "where" clause. Since this is "NoSQL" this
+      // query is impossible without this Index configured on the table ahead of time.
+
+      // The alternative is to scan() all BusEvents and only show the days and buses we want.
+      // Or put a secondary/sort index on "day" and display only the buses we want.
+
       let dbRequest = {
         TableName : "BusEvents",
         IndexName: "day-bus-index",
