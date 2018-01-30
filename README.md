@@ -2,6 +2,8 @@
 ====
 
 Requires local AWS credentials for [serverless-admin] in ~/.aws/credentials
+You can also use "aws configure" to enter the AWS keys (which will call the keys "default" instead of "serverless-admin".
+
 <code>
 
     # Install serverless globally
