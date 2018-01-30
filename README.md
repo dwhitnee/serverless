@@ -7,7 +7,7 @@ Requires local AWS credentials for [serverless-admin] in ~/.aws/credentials
     # Install serverless globally
     npm install serverless -g
 
-    # Login to your Serverless account
+    # Login to your Serverless account (optional)
     serverless login
 
     # Create a serverless function
