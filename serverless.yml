@@ -8,8 +8,13 @@
 #    export AWS_REGION=us-west-2
 #    serverless deploy    # --aws-profile serverless-admin --region us-west-2
 #
+# or for updates of a single function:
+#    serverless deploy function -f getBusEvents
+#
 # The `service` block is the name of the service, as in
 # https://1zqvyi3gfk.execute-api.us-east-1.amazonaws.com/dev/late-bus
+#
+# See also https://serverless.com/blog/quick-tips-for-faster-serverless-development/
 #----------------------------------------
 
 service: late-bus
